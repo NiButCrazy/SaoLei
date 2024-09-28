@@ -6,14 +6,19 @@
 import random
 
 # 定义全局变量
-# 地图，记录地雷和数字
-ground = []
+
 # 显示的地图，记录玩家可见的信息
 show_ground = []
 # 地图的长度
-length = 0
+length = 10
 # 判断区域，用于记录检测过程
 judge_ground = []
+# 地图，记录地雷和数字
+ground = [[0 for i in range(length)] for j in range(length)]
+# 地雷的数量
+number = 10
+# 地雷位置
+bomb_area = []
 
 # 在地雷周围做标记，增加计数
 def pre_boom(x, y):
@@ -22,7 +27,7 @@ def pre_boom(x, y):
     :param x: 地雷的x坐标
     :param y: 地雷的y坐标
     """
-    global ground, show_ground, length
+    # global ground, show_ground, length
 
     # 遍历地雷周围的每个格子，如果不是地雷，则计数加一
     for i in [x - 1, x, x + 1]:
@@ -37,7 +42,7 @@ def detection(x, y):
     :param x: 检测区域的x坐标
     :param y: 检测区域的y坐标
     """
-    global ground, show_ground, length, judge_ground
+    # global ground, show_ground, length, judge_ground
 
     # 判断当前区域是否安全
     judge = True
@@ -63,14 +68,10 @@ def detection(x, y):
 
     # 更新显示的地图
     if ground[x][y] != 9:
-        show_ground[x][y] = ground[x][y]
+        show_ground[x][y] = ground[x][y] if ground[x][y] != 0 else "□"
 
 
-# 初始化地图参数
-length = 10
-number = 10
-ground = [[0 for i in range(length)] for j in range(length)]
-bomb_area = []
+
 
 # 随机布置地雷
 while number > 0:
@@ -83,23 +84,24 @@ while number > 0:
 
 # 打印地雷位置，并在地雷周围做标记
 for i in bomb_area:
-    print(i)
     pre_boom(i[0], i[1])
 
-# 打印生成的地图
-for i in ground:
-    print(i)
+# # 打印生成的地图
+# for i in ground:
+#     print(i)
 
 # 初始化显示的地图
-show_ground = [[8 for i in range(length)] for j in range(length)]
+show_ground = [["■" for i in range(length)] for j in range(length)]
+for i in show_ground:
+    print(" ".join(map(str, i)))
 
 # 游戏主循环
 while True:
     judge_ground = [[0 for i in range(length)] for j in range(length)]
-    region = list(map(int,input("2").split()))
+    region = list(map(int,input("输入坐标，空格为界:").split()))
     # 判断是否踩中地雷
     if [region[1] - 1, region[0] - 1] in bomb_area:
-        print("lose")
+        print("你🐎炸了")
         break
     else:
         # 检测安全区域
@@ -107,4 +109,6 @@ while True:
 
     # 更新并打印显示的地图
     for i in show_ground:
-        print("".join(map(str, i)))
+        print(" ".join(map(str, i)))
+    # for i in bomb_area:
+    #     print(" ".join(map(str, i)))

@@ -1,0 +1,11 @@
+{
+    "__comment__": "这是注释",
+    "height": 800,
+    "width": 800,
+    "FPS": 60,
+    "map_size": [
+        10,
+        10
+    ],
+    "bomb_number": 5
+}

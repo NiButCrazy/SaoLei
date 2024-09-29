@@ -5,20 +5,21 @@
 
 import random
 
+
 # 定义全局变量
 
 # 显示的地图，记录玩家可见的信息
-show_ground = []
+show_ground:list = []
 # 地图的长度
-length = 10
+length:int = 10
 # 判断区域，用于记录检测过程
-judge_ground = []
+judge_ground:list = []
 # 地图，记录地雷和数字
-ground = [[0 for i in range(length)] for j in range(length)]
+ground:list = [[0 for i in range(length)] for j in range(length)]
 # 地雷的数量
-number = 10
+number:int = 10
 # 地雷位置
-bomb_area = []
+bomb_area:list = []
 
 # 在地雷周围做标记，增加计数
 def pre_boom(x, y):
@@ -91,24 +92,27 @@ for i in bomb_area:
 #     print(i)
 
 # 初始化显示的地图
-show_ground = [["■" for i in range(length)] for j in range(length)]
+show_ground:list = [["■" for i in range(length)] for j in range(length)]
 for i in show_ground:
     print(" ".join(map(str, i)))
 
-# 游戏主循环
-while True:
-    judge_ground = [[0 for i in range(length)] for j in range(length)]
-    region = list(map(int,input("输入坐标，空格为界:").split()))
-    # 判断是否踩中地雷
-    if [region[1] - 1, region[0] - 1] in bomb_area:
-        print("你🐎炸了")
-        break
-    else:
-        # 检测安全区域
-        detection(region[1] - 1, region[0] - 1)
 
-    # 更新并打印显示的地图
-    for i in show_ground:
-        print(" ".join(map(str, i)))
-    # for i in bomb_area:
-    #     print(" ".join(map(str, i)))
+# 调试入口
+if __name__ == "__main__":
+    # 游戏主循环
+    while True:
+        judge_ground:list = [[0 for i in range(length)] for j in range(length)]
+        region:list = list(map(int,input("输入坐标，空格为界:").split()))
+        # 判断是否踩中地雷
+        if [region[1] - 1, region[0] - 1] in bomb_area:
+            print("你🐎炸了")
+            break
+        else:
+            # 检测安全区域
+            detection(region[1] - 1, region[0] - 1)
+
+        # 更新并打印显示的地图
+        for i in show_ground:
+            print(" ".join(map(str, i)))
+        # for i in bomb_area:
+        #     print(" ".join(map(str, i)))

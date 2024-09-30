@@ -4,7 +4,7 @@
 import pygame
 import sys
 import eventManager
-import button
+import startScene
 import time
 import config
 
@@ -24,20 +24,23 @@ pygame.display.set_caption("扫雷🤣👉🤡")
 screen = pygame.display.set_mode((config.get_config("width"), config.get_config("height")))
 # 事件管理器
 event_manager = eventManager.manager
-
-btn_1 = button.ButtonBase(screen, 0, 0, (100, 100), "1")
+# 设定初始场景UI
+now_scene, background_img = startScene.load_start_scene(screen)
 
 while True:
+    screen.fill((0, 0, 0))
+    screen.blit(background_img, (0, 0))
     # 事件监听
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
-            sys.exit()
             pygame.quit()
+            sys.exit()
         else:
             event_manager.emit(event)
 
     # UI绘制
-    btn_1.update()
+    for ui in now_scene:
+        ui.update(FPS_CLOCK)
 
     pygame.display.flip()
     time.sleep(FPS_CLOCK)

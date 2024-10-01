@@ -3,8 +3,11 @@
 """
 
 import json
+import os
 from tkinter import messagebox
 
+# 把当前目录设置为工作目录，防止外部运行某个脚本无法定位目录
+os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
 def error_message(message):
     # 创建一个简单的Tkinter警告弹窗
@@ -28,6 +31,7 @@ def write_config(key: str, value: any) -> bool:
     data[key] = value
     try:
         with open("config.json", 'w', encoding='utf-8') as f:
+            # noinspection PyTypeChecker
             json.dump(data, f, indent=4, ensure_ascii=False)
         return True
     except Exception as e:

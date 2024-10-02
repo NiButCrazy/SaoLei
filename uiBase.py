@@ -63,19 +63,19 @@ class UIBase:
         """
 
         # 鼠标按下回调函数
-        self.__mouse_down_callback = lambda event, args: Any # print("鼠标按下")
-        self.__mouse_down_callback_args = ()
+        self.__mouse_down_callback = lambda event, option: print(self.name)
+        self.__mouse_down_callback_args = {}
         # 鼠标抬起回调函数
-        self.__mouse_up_callback = lambda event, args: Any # print("鼠标抬起")
-        self.__mouse_up_callback_args = ()
+        self.__mouse_up_callback = lambda event, option: Any # print("鼠标抬起")
+        self.__mouse_up_callback_args = {}
         # 鼠标进入UI回调函数
-        self.__mouse_enter_callback = lambda event, args: Any # print("鼠标进入")
-        self.__mouse_enter_callback_args = ()
+        self.__mouse_enter_callback = lambda event, option: Any # print("鼠标进入")
+        self.__mouse_enter_callback_args = {}
         # 鼠标进入UI回调函数
-        self.__mouse_leave_callback = lambda event, args: Any # print("鼠标离开")
-        self.__mouse_leave_callback_args = ()
+        self.__mouse_leave_callback = lambda event, option: Any # print("鼠标离开")
+        self.__mouse_leave_callback_args = {}
         # 基本参数
-        self.name = "" # 只作为标识符ID，不可重复
+        self.name = "-1" # 只作为标识符ID，不可重复
         self.screen = screen
         self.opacity = 255 # 背景颜色透明度
         self.content = text
@@ -84,6 +84,7 @@ class UIBase:
         self.font_opacity = 255  # 文字透明度
         self.user_font_family = user_font_family # 是否使用用户自定义字体文件
         self.font_family = font_family
+        self.text = None # 最终字体surface对象
         self.pos_x = x
         self.pos_y = y
         self.width = size[0] # 实时宽度
@@ -142,6 +143,10 @@ class UIBase:
         """
         if not self.enabled_event:
             return True
+
+        # 记录事件是否被子节点捕获
+        children_stop_emit = False
+
         # 给子节点发送事件
         # 最后渲染的(也就是最顶层的)ui最先接收到事件，防止事件被底层ui吞了，同一个按键事件只会被最顶层的UI处理
         for index in range(len(self.children) - 1, -1, -1):
@@ -149,7 +154,7 @@ class UIBase:
             # 如果已被目标UI截断，则其他UI不再调用的此事件的处理函数
             if not if_continue_emit:
                 option["stop_emit"] = True
-                return False
+                children_stop_emit = True
 
         # 处理键盘输入事件，同一个按键事件只会被最顶层的UI处理
         if self.enabled_keyboard_event and not option["stop_emit"]:
@@ -188,13 +193,16 @@ class UIBase:
             if self.is_hover:
                 self.is_hover = False
                 self._mouse_leave(event)
+
             # 事件向下传递
+            if children_stop_emit:
+                return False
             return True
 
     def _mouse_down(self, event:pygame.event.Event):
         self.__mouse_down_callback(event,self.__mouse_down_callback_args)
 
-    def mouse_down(self, callback:Callable[[pygame.event.Event, tuple],Any], **option):
+    def mouse_down(self, callback:Callable[[pygame.event.Event, dict[str,Any]],Any], **option):
         """
         绑定鼠标按下时的回调参数
         :param callback: 回调函数
@@ -207,7 +215,7 @@ class UIBase:
     def _mouse_up(self, event:pygame.event.Event):
         self.__mouse_up_callback(event,self.__mouse_up_callback_args)
 
-    def mouse_up(self, callback:Callable[[pygame.event.Event, tuple],Any], **option):
+    def mouse_up(self, callback:Callable[[pygame.event.Event, dict[str,Any]],Any], **option):
         """
         绑定鼠标抬起时的回调参数
         :param callback: 回调函数
@@ -217,7 +225,7 @@ class UIBase:
         self.__mouse_up_callback = callback
         self.__mouse_up_callback_args = option
 
-    def mouse_enter(self, callback:Callable[[pygame.event.Event, tuple],Any], **option):
+    def mouse_enter(self, callback:Callable[[pygame.event.Event, dict[str,Any]],Any], **option):
         """
         绑定鼠标进入时的回调参数
         :param callback: 回调函数
@@ -230,7 +238,7 @@ class UIBase:
     def _mouse_enter(self, event: pygame.event.Event):
         self.__mouse_enter_callback(event, self.__mouse_enter_callback_args)
 
-    def mouse_leave(self, callback:Callable[[pygame.event.Event, tuple],Any], **option):
+    def mouse_leave(self, callback:Callable[[pygame.event.Event, dict[str,Any]],Any], **option):
         """
         绑定鼠标离开时的回调参数
         :param callback: 回调函数

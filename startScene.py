@@ -78,14 +78,14 @@ def start_menu_scene(screen: pygame.Surface) -> tuple[list[StartSceneBtn], pygam
 
     # 忽略形参类型检查
     # noinspection PyUnusedLocal
-    def btn_exit_enter(event: pygame.event.Event, args: tuple):
+    def btn_exit_enter(event: pygame.event.Event, option):
         btn_exit.set_background_image(btn_exit_img)
         switch_img_surface.set_background_image(btn_exit_switch_img)
         switch_text.set_text(content="你真要狠心离开吗")
 
     # 可以忽略形参类型检查
     # noinspection PyUnusedLocal
-    def btn_exit_up(event: pygame.event.Event, args: tuple):
+    def btn_exit_up(event: pygame.event.Event, option):
         sure = messagebox.askokcancel("太狠心了", "要离开了吗？")
         if sure:
             pygame.quit()
@@ -186,6 +186,8 @@ def open_rank(screen: pygame.Surface,btn: StartSceneBtn):
             setting_ui_mask.transition_opacity(0, 0.1, fps_clock).then(lambda **options: setting_ui_mask.close())
             setting_ui.transition_opacity(0, 0.1, fps_clock)
         # 开启遮罩的键盘事件
+        setting_ui_mask.name = "遮罩"
+        setting_ui_mask.mouse_up(lambda event, option: print('嘿嘿'))
         setting_ui_mask.enabled_keyboard_event = True
         setting_ui_mask.bind_keyboard_callback(pygame.K_ESCAPE, pygame.KEYUP, close_setting_ui)
 

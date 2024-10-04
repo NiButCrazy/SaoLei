@@ -18,9 +18,11 @@ class StartSceneBtn(uiBase.UIBase):
                  size: tuple,
                  color: tuple = (255,255,255),
                  text: str = "",
-                 font_size: int = 16, font_color:tuple | str = (0,0,0),
+                 font_size: int = 16,
+                 font_color:tuple | str = (0,0,0),
                  font_family: str = "resource/font.ttf",
-                 user_font_family = True
+                 user_font_family = True,
+                 center_anchor: bool = False
                 ):
         """
         定义开始菜单的通用按钮，已经把字体定义好了
@@ -28,17 +30,19 @@ class StartSceneBtn(uiBase.UIBase):
         :param x: UI的位置x
         :param y: UI的位置y
         :param size: UI的大小(width,height)
-        :param color: (可选) UI上的背景颜色
-        :param text: (可选) UI上的文本
-        :param font_size: (可选) UI上的文本字体大小
-        :param text: (可选) UI上的文本字体颜色
-        :param font_family: (可选) 字体
-        :param user_font_family: (可选) 是否使用用户自定义字体文件
+        :parameter color: (可选) UI上的背景颜色
+        :parameter text: (可选) UI上的文本
+        :parameter font_size: (可选) UI上的文本字体大小
+        :parameter font_color: (可选) UI上的文本字体颜色
+        :parameter font_family: (可选) 字体
+        :parameter user_font_family: (可选) 是否使用用户自定义字体文件
+        :parameter center_anchor: (可选) 是否以中心点为锚点
         """
         super().__init__(
                 screen, x,y, size, color, text, font_size, font_color,
                         font_family = font_family,
-                        user_font_family = user_font_family
+                        user_font_family = user_font_family,
+                        center_anchor = center_anchor
                         )
         # 加载按钮图片与点击音效
         self.btn_img = pygame.image.load("resource/btn4.png")

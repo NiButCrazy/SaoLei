@@ -7,14 +7,18 @@ __all__ = [
     "scene_manager"
 ]
 
+from config import get_config
+
+
 class SceneManager:
     """
-    管理所有场景的类
+    管理所有场景的类，也保存游戏的一些基本变量
     """
 
     def __init__(self):
         self.scene_list = {}
         self.now_scene = None
+        self.FPS_CLOCK = 1 / get_config("FPS")
 
     def push_scene(self, scene_name: str, scene:tuple[list, pygame.Surface]) -> None:
         """

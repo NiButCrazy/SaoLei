@@ -2,6 +2,36 @@
 
 *日志使用 [Simple Changelog 汉化版](https://github.com/NiButCrazy/simple-changelog-Chinese) 生成*
 
+## [1.4.5-Beta] - 2024-10-04
+### 新增内容
+- 为排行榜记忆上次打开的位置
+- 添加了排行榜功能
+- 添加了设置的按钮的真正功能
+- 添加了致谢界面
+- config 模块添加了 get_rank、save_config、get_config_all函数
+- UIBase 添加了字体加粗、设置圆形遮罩图片、UIChildrenList 类 进行”父节点存储、子节点删除“等操作
+- UIBase 添加了中心点锚点的属性，十分好用
+- 添加了一个 inputBox 模块用来获取用户文本输入
+-  eventManager 添加了一个 set_event_penetration 函数用来设置事件是否穿透
+
+### 作出更改
+- 更改了系统消息弹窗的逻辑，变成顶置且多线程，减少卡死概率
+- 把计算 FPS 的任务交给了 sceneManager 并且代由存储，方便改变与管理
+- 更改了 enabled_event 的逻辑，现在不会影响子节点接收事件
+
+### 修复错误
+- 修复设置界面鼠标光标会抽搐的问题
+- 修复了缩放过渡函数在缩放时间为0时会崩溃的BUG
+- 修复了消息系统传递逻辑问题
+- 修复了若干BUG
+
+### 文档变化
+- 更新自述文件
+
+### 不推荐使用功能
+- 不推荐使用”开始游戏“，因为还没开始做 ( doge )
+
+
 ## [1.4.2-Beta] - 2024-10-01
 ### 新增内容
 - uiBase 添加了 透明度 过渡效果函数

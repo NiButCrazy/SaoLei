@@ -46,5 +46,17 @@ def emit(event: pygame.event.Event, **option) -> None:
         if not if_continue_emit:
             option["stop_emit"] = True
 
+def set_event_penetration(event: pygame.event.Event, boolean:bool, force:bool = False):
+    """
+    切换某个事件穿透状态
+    :param event: 一个pygame的事件
+    :param boolean: 是否开启事件穿透
+    :param force: 是否开启强制事件穿透，可以无视UI本身设置的事件穿透属性
+    :return:
+    """
+    if force:
+        event.force_event_penetration = boolean
+    event.enabled_event_penetration = boolean
+
 # 单例类
 event_manager = EventManager()

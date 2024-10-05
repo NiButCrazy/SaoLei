@@ -55,6 +55,8 @@ def get_rank() -> bool | dict[str, list[list[int, str, int]]]:
         with open("user.rank", 'r', encoding='utf-8') as f:
             rank_data = f.read().strip().split("\n")
             rank_dict = {"10x10":[], "15x15":[], "20x20":[],"30x30":[],"40x40":[],"50x50":[],"自定义":[]}
+            if rank_data == ['']:
+                return rank_dict
             for rank in rank_data:
                 name, map_size, bomb_number, time = rank.split(" ")
                 if map_size not in rank_dict:

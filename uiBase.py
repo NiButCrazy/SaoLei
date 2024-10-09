@@ -5,8 +5,6 @@ from typing import Callable,Any
 
 import pygame
 
-from sceneManager import scene_manager
-
 
 class UIChildrenList(list):
     """
@@ -456,7 +454,7 @@ class UIBase:
         self.__opacity_duration = duration
         # 目标透明度
         self.__dest_opacity = dest_opacity
-        if self.__fps_clock == 0.0:
+        if fps_clock == 0.0:
             fps_clock = self.__fps_clock
         # 总过渡步数
         self.__opacity_step = int( duration / fps_clock )
@@ -487,23 +485,23 @@ class UIBase:
                 self.__transition_opacity_running = False
                 self.__timers["opacity"].use_callback()
 
-    def set_background_image(self, image: str | pygame.Surface, use_circular_mask: bool = False):
+    def set_background_image(self, path: str | pygame.Surface, use_circular_mask: bool = False):
         """
         设置背景图片
-        :param image: 接受一个图片路径字符串 或 一个图片的Surface对象
+        :param path: 接受一个图片路径字符串 或 一个图片的Surface对象
         :parameter use_circular_mask: 是否使用圆形蒙版
         :return:
         """
-        if isinstance(image, str):
+        if isinstance(path, str):
             # image为路径字符串的情况
             self.background_img = pygame.transform.smoothscale(
-                pygame.image.load(image),
+                pygame.image.load(path),
                 (self.width, self.height)
             )
         else:
             # image为Surface的情况
             self.background_img = pygame.transform.smoothscale(
-                image,
+                path,
                 (self.width, self.height)
             )
         # 做过渡动画时，必须要有一个原始背景图片的格式，所以要有两个background_img
@@ -535,6 +533,7 @@ class UIBase:
         从渲染列表中删除该UI
         :return:
         """
+        from sceneManager import scene_manager
         if self in scene_manager.now_scene[0]:
             scene_manager.now_scene[0].remove(self)
         if not self.parent_node is None:
@@ -572,3 +571,10 @@ class UIBase:
         # color 代表蒙版的滤镜偏色，（255，255，255）代表没有滤镜，后面那一坨参数是抗锯齿
         pygame.draw.circle(mask_surface, (255, 255, 255), (mask_radius, mask_radius), mask_radius)
         return mask_surface
+
+    def get_blit_background_image(self):
+        """
+        获得被渲染的背景图片
+        :return:
+        """
+        return self.__background_img

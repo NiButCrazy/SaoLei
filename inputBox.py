@@ -7,6 +7,7 @@ from tkinter import messagebox
 import threading
 from typing import Any
 
+
 click_enter = False
 def __create_input_box(title: str, option: dict[str, Any]):
     # 创建主窗口
@@ -84,14 +85,27 @@ def create_input_box(title: str, **option):
     return
 
 # 一个自定义消息窗口
-def message_box(title: str, content: str):
-    # 创建一个自定义的消息框窗口
-    root = tk.Tk()
-    root.withdraw()  # 隐藏主窗口
-    # 设置窗口保持在最前端
-    root.attributes('-topmost', True)
-    boolean = messagebox.askokcancel(title, content)
-    root.destroy()
-    # 运行主循环
+def message_box(title: str, content: str, message_type: str = "ask ok", enable_thread: bool = False):
+    boolean = False
+    if enable_thread:
+        def __thread_message_box():
+            if message_type == "ask ok":
+                messagebox.askokcancel(title, content)
+            elif message_type == "info":
+                messagebox.showinfo(title, content)
+        msg_thread = threading.Thread(target=__thread_message_box)
+        msg_thread.daemon = True
+        msg_thread.start()
+    else:
+        # 创建一个自定义的消息框窗口
+        root = tk.Tk()
+        root.withdraw()  # 隐藏主窗口
+        # 设置窗口保持在最前端
+        root.attributes('-topmost', True)
+        if message_type == "ask ok":
+            boolean =messagebox.askokcancel(title, content)
+        elif message_type == "info":
+            boolean =messagebox.showinfo(title, content)
+        root.destroy()
     return boolean
 

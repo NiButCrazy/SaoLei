@@ -2,6 +2,18 @@
 
 *日志使用 [Simple Changelog 汉化版](https://github.com/NiButCrazy/simple-changelog-Chinese) 生成*
 
+## [1.5.0-Beta] - 2024-10-05
+### 新增内容
+- 为 sceneManager 添加了场景过渡函数
+- 添加了一个应用启动界面
+
+### 作出更改
+- 将背景音乐加载的任务集成到 sceneManager上
+
+### 修复错误
+- 修复了 UIBase 在trandition opacity 时引发的意外除0错误
+
+
 ## [1.4.5-Beta] - 2024-10-04
 ### 新增内容
 - 为排行榜记忆上次打开的位置
@@ -12,7 +24,7 @@
 - UIBase 添加了字体加粗、设置圆形遮罩图片、UIChildrenList 类 进行”父节点存储、子节点删除“等操作
 - UIBase 添加了中心点锚点的属性，十分好用
 - 添加了一个 inputBox 模块用来获取用户文本输入
--  eventManager 添加了一个 set_event_penetration 函数用来设置事件是否穿透
+- eventManager 添加了一个 set_event_penetration 函数用来设置事件是否穿透
 
 ### 作出更改
 - 更改了系统消息弹窗的逻辑，变成顶置且多线程，减少卡死概率
@@ -24,6 +36,7 @@
 - 修复了缩放过渡函数在缩放时间为0时会崩溃的BUG
 - 修复了消息系统传递逻辑问题
 - 修复了若干BUG
+- 修复了排名文件为空时导致的游戏崩溃
 
 ### 文档变化
 - 更新自述文件

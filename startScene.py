@@ -7,7 +7,7 @@ import uiBase
 import sys
 
 from inputBox import create_input_box, message_box
-from config import get_config, save_config, get_config_all, get_rank
+from config import get_config, save_config, get_config_all, get_rank, reload_config
 from eventManager import event_manager
 from eventManager import set_event_penetration
 from startSceneBtn import StartSceneBtn
@@ -20,7 +20,7 @@ __all__ = [
 
 # FPS预设列表d
 FPS_PRESET = [30, 60, 120, 240]
-# 地图大小
+# 预设地图大小
 MAP_SIZE_PRESET = [[10, 10], [15, 15], [20, 20], [30, 30], [40, 40], [50, 50]]
 
 screen_width = get_config("width")
@@ -50,10 +50,6 @@ def start_menu_scene(screen: pygame.Surface) -> tuple[list[StartSceneBtn], pygam
     :return: 返回一个列表，list[0]是包含所有UIBase实例的列表，list[1]是一个背景图片的Surface对象
     """
 
-    # 播放背景音乐
-    pygame.mixer.music.load("resource/music2.mp3")
-    pygame.mixer.music.set_volume(get_config("volume"))
-    pygame.mixer.music.play(-1)
 
     # 此场景的背景图片
     background_img = pygame.image.load("resource/background-img.jpg")
@@ -74,6 +70,8 @@ def start_menu_scene(screen: pygame.Surface) -> tuple[list[StartSceneBtn], pygam
     # 开始游戏按钮
     btn_start_game = StartSceneBtn(screen, -52, 100, (200, 70), text = "开始",font_size = 22)
     btn_start_game.mouse_enter(lambda event, args: (switch_img_surface.set_background_image(btn_start_game_switch_img), switch_text.set_text(content = "吃雷行动")))
+    btn_start_game.mouse_up(lambda event, args: open_start_game(screen))
+    scene_manager.ui_dict["btn_start_game"] = btn_start_game
     # 设置按钮
     btn_setting = StartSceneBtn(screen, -52, 180, (200, 70), text = "设置", font_size = 22)
     btn_setting.mouse_enter(lambda event, args: (switch_img_surface.set_background_image(btn_setting_switch_img), switch_text.set_text(content = "懒狗设置")))
@@ -124,6 +122,8 @@ def start_menu_scene(screen: pygame.Surface) -> tuple[list[StartSceneBtn], pygam
     ]
     return ui_list,background_img
 
+setting_info_bomb_number: uiBase.UIBase | None = None
+
 def open_setting(screen: pygame.Surface, btn: StartSceneBtn):
     """
     打开设置UI
@@ -132,6 +132,8 @@ def open_setting(screen: pygame.Surface, btn: StartSceneBtn):
     :return:
     """
     if not btn.has_open_ui:
+        # 读取设置
+        reload_config()
         # 计算出游戏更新循环周期
         fps_clock = scene_manager.FPS_CLOCK
         # 发送一个打开设置的事件，间接更新渲染视图
@@ -197,6 +199,9 @@ def open_setting(screen: pygame.Surface, btn: StartSceneBtn):
                 setting_info.name = get_config('player_names')[get_config('player_name_index')]
             else:
                 setting_info.name = title
+            if title == "地雷数量":
+                global setting_info_bomb_number
+                setting_info_bomb_number = setting_info
             # 扩大判定区域，使得可以按到箭头按钮
             setting_info.rect.width += 80
             size = setting_info.rect.size
@@ -291,6 +296,9 @@ def setting_right_arrow_mouse_up(event: pygame.event.Event, option: dict[str, ui
         if index + 1 < len(MAP_SIZE_PRESET):
             now_map_size = MAP_SIZE_PRESET[index + 1]
             setting_info.set_text(f"{now_map_size[0]} x {now_map_size[1]}")
+            now_bomb_number = int(now_map_size[1] * now_map_size[0] / 4)
+            setting_info_bomb_number.set_text(str(now_bomb_number))
+            get_config_all()["bomb_number"] = now_bomb_number
             get_config_all()["map_size"] = now_map_size
 
 
@@ -343,6 +351,9 @@ def setting_left_arrow_mouse_up(event: pygame.event.Event, option: dict[str, uiB
             now_map_size = MAP_SIZE_PRESET[index - 1]
             setting_info.set_text(f"{now_map_size[0]} x {now_map_size[1]}")
             get_config_all()["map_size"] = now_map_size
+            now_bomb_number = int(now_map_size[1] * now_map_size[0] / 4)
+            setting_info_bomb_number.set_text(str(now_bomb_number))
+            get_config_all()["bomb_number"] = now_bomb_number
 
     elif title == "地雷数量":
         now_bomb_number = get_config("bomb_number") - 1
@@ -353,6 +364,7 @@ def setting_left_arrow_mouse_up(event: pygame.event.Event, option: dict[str, uiB
             else:
                 setting_info.set_text(str(now_bomb_number))
             get_config_all()["bomb_number"] = now_bomb_number
+
 
     elif title == "背景音乐":
         now_volume = get_config("volume")
@@ -844,3 +856,7 @@ def open_create(screen: pygame.Surface, btn: StartSceneBtn):
         create_ui.transition_opacity(255, 1, fps_clock)
         # 把遮罩推入渲染UI列表
         scene_manager.now_scene[0].append(create_ui_mask)
+
+def open_start_game(screen: pygame.Surface):
+    scene_manager.smooth_toggle_scene(screen,"start_game")
+    event_manager.post_event("打开开始游戏")

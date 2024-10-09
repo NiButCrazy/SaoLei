@@ -87,9 +87,9 @@ while number > 0:
 for i in bomb_area:
     pre_boom(i[0], i[1])
 
-# # 打印生成的地图
-# for i in ground:
-#     print(i)
+# 打印生成的地图
+for i in ground:
+    print(i)
 
 # 初始化显示的地图
 show_ground:list = [["■" for i in range(length)] for j in range(length)]

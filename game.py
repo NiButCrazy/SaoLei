@@ -6,8 +6,9 @@ import pygame
 import startScene
 import time
 import config
+import gameScene
 from sceneManager import scene_manager
-from eventManager import emit
+from eventManager import emit, event_manager
 from inputBox import message_box
 
 
@@ -22,10 +23,12 @@ pygame.display.set_caption("扫雷🤣👉🤡")
 # 设置屏幕大小
 screen = pygame.display.set_mode((config.get_config("width"), config.get_config("height")))
 # ==== 设定初始场景UI ====
-# 将菜单场景推入场景列表
-scene_manager.push_scene("start_menu", startScene.start_menu_scene(screen))
-# 加载现有场景
-scene_manager.load_scene("start_menu")
+# 将菜单场景和游戏场景推入场景列表进行初始化
+scene_manager.push_scene("start_game", gameScene.start_game_scene(screen), bg_music="resource/music1.mp3")
+scene_manager.push_scene("start_menu", startScene.start_menu_scene(screen), bg_music="resource/music2.mp3")
+# 加载启动场景
+scene_manager.load_scene("start_game")
+# scene_manager.load_welcome_scene(screen)
 
 while True:
     # 事件监听
@@ -37,6 +40,10 @@ while True:
             if res:
                 pygame.quit()
                 sys.exit()
+        # 游戏是否处于暂停状态
+        elif event_manager.game_stop:
+            time.sleep(scene_manager.FPS_CLOCK)
+            continue
         else:
             # 向事件管理器发送事件
             emit(event, stop_emit = False)

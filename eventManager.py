@@ -13,6 +13,8 @@ class EventManager:
         self.user_events = {}
         # 现在最新注册的事件id
         self.now_event_id = pygame.USEREVENT
+        # 记录游戏是否暂停
+        self.game_stop = False
 
     def register_event(self, event_name: str) -> None:
         """

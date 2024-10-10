@@ -15,6 +15,10 @@ class EventManager:
         self.now_event_id = pygame.USEREVENT
         # 记录游戏是否暂停
         self.game_stop = False
+        # 记录游戏是否已经开始过一次
+        self.game_has_started = False
+        # 记录是否在游戏中
+        self.game_playing = False
 
     def register_event(self, event_name: str) -> None:
         """

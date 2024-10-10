@@ -27,8 +27,8 @@ screen = pygame.display.set_mode((config.get_config("width"), config.get_config(
 scene_manager.push_scene("start_game", gameScene.start_game_scene(screen), bg_music="resource/music1.mp3")
 scene_manager.push_scene("start_menu", startScene.start_menu_scene(screen), bg_music="resource/music2.mp3")
 # 加载启动场景
-scene_manager.load_scene("start_game")
-# scene_manager.load_welcome_scene(screen)
+scene_manager.load_welcome_scene(screen)
+
 
 while True:
     # 事件监听

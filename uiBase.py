@@ -29,7 +29,7 @@ class Timer:
         self.__callback = None
         self.__option = {}
 
-    def then(self, callback: callable, **option):
+    def then(self, callback: Callable, **option):
         """
         用于某些计时函数完成后调用回调函数
         :param callback: 回调函数
@@ -578,3 +578,4 @@ class UIBase:
         :return:
         """
         return self.__background_img
+

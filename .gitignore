@@ -1,3 +1,6 @@
 .vscode/
 .idea/
 __pycache__/
+build/
+dist/
+game.spec

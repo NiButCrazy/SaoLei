@@ -232,7 +232,10 @@ def load_new_game(ui: UIBase, timer_thread: TimerThread):
             map_surface.blit(block, (x * block_width,y * block_height))
 
     ui.set_background_image(map_surface)
-    game_map = gameMap.GameMap(map_width, map_height, get_config("bomb_number"),timer_thread)
+    bomb_num = get_config("bomb_number")
+    if bomb_num == -1:
+        bomb_num = map_width * map_height - 1
+    game_map = gameMap.GameMap(map_width, map_height, bomb_num, timer_thread)
     ui.mouse_down(get_list_pos_from_ui_pos, block_size = (block_width, block_height), game_map = game_map, ui = ui, timer_thread = timer_thread)
     # 如果游戏是第一次开始，则淡化背景图片
     if not event_manager.game_has_started:
